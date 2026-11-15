@@ -1,10 +1,9 @@
-import http.server
-import ssl
+from http.server import HTTPServer, SimpleHTTPRequestHandler
+from ssl import SSLContext, PROTOCOL_TLS_SERVER
 
-server_address = ('0.0.0.0', 443)
-context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+context = SSLContext(PROTOCOL_TLS_SERVER)
 context.load_cert_chain('localhost.pem')
-httpd = http.server.HTTPServer(server_address,http.server.SimpleHTTPRequestHandler)
+httpd = HTTPServer(('0.0.0.0', 443), SimpleHTTPRequestHandler)
 httpd.socket = context.wrap_socket(httpd.socket,server_side=True)
-print('running server')
+print('running server !!')
 httpd.serve_forever()

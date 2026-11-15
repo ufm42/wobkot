@@ -1,1 +1,3 @@
-/public/src/payload.bin
+src/ps4/payload.bin
+src/ps5/elfldr.elf
+src/ps5/kexp.bin
