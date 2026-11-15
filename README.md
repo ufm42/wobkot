@@ -24,7 +24,7 @@ Updated userland to use newer JSC bugs.
 
 Special thanks to:
 
-- Nathan Fargo
+- Nathan Fargo [writeup](https://linearfox.com/blog/cssfontface-uaf-playstation)
 - nhk
 - Dr.Yenyen
 - AlAzif
