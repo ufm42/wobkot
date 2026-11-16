@@ -1240,8 +1240,8 @@ const impl_map = {
       wk_pthread_create: 0x2ad7ee0,
       wk_pthread_join: 0x2ad7f20,
       wk_expm1_builtin: 0x57850,
-      wk___imp___error: 0x2ad6340,
-      wk___imp_strerror: 0x2ad6380,
+      wk___imp___error: 0x3352230,
+      wk___imp_strerror: 0x3352250,
 
       get wk_LEAVE_RET() {
         return webkit_base.add(0x29a4b7b);
