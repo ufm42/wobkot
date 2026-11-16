@@ -66,7 +66,8 @@ async function exploit() {
   if (version.major < 12 || (version.major === 12 && version.minor <= 2)) {
     await load_script('src/lapse.js');
   } else {
-    await load_script('src/lapse.js');
+    throw new Error(`${version} exploit is WIP`);
+    //await load_script('src/lapse.js');
   }
 
   await exploit_main();
