@@ -158,7 +158,7 @@ const impl_map = {
       k_dynlib_status: 0x118,
       k_stack_leak_td: 0xc0,
       k_stack_leak_so: 0xd8,
-      k_aio_table: 0xc38,
+      k_aio_table: 0xc28,
 
       lk_close: 0x36660,
       lk__error: 0x1e050,
@@ -295,6 +295,7 @@ const impl_map = {
       k_sysctl___kern_smp_cpus: 0x27706c0,
       k_route_output_rtmsg2_ret: 0xa83731,
       k_dynlib_status: 0x120,
+      k_aio_table: 0xc38,
 
       lk_close: 0x37210,
       lk__error: 0x1e7b0,
