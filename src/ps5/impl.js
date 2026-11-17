@@ -688,6 +688,10 @@ const impl_map = {
     },
   },
   9: {
+    5: {
+      // Firmware 9.05 - KASLR slide differs from 9.00 (dumped live)
+      k_route_output_rtmsg2_ret: 0xac1681,
+    },
     0: {
       k_sysctl___kern_smp_cpus: 0x2787ab0,
       k_route_output_rtmsg2_ret: 0xac1451,
