@@ -345,7 +345,7 @@ const impl_map = {
       lc_strerror: 0x357d0,
 
       wk_pthread_create: 0x4748,
-      wk_pthread_join: 0x4978,
+      wk_pthread_join: 0x4778,
       wk_expm1_builtin: 0xd05b0,
       wk___imp___error: 0x2f91ce0,
       wk___imp_strerror: 0x2f91d00,
