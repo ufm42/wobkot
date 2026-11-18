@@ -8,7 +8,7 @@ Updated userland to use newer JSC bugs.
   - for ps5: `elfldr.elf` and `kexp.bin` in `src/ps5` folder.
   - for ps4: `payload.bin` in `src/ps4` folder.
 - `py host.py`
-- open web browser and type `https://{PC_IP}`
+- open console web browser and type `https://{PC_IP}`
 
 # References
 
