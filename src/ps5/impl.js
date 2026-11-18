@@ -317,7 +317,7 @@ const impl_map = {
       },
       get wk_POP_RSP_RET() {
         return webkit_base.add(0x36318b0);
-      }
+      },
     },
   },
   7: {
@@ -325,7 +325,6 @@ const impl_map = {
       k_sysctl___kern_smp_cpus: 0x27706c0,
       k_route_output_rtmsg2_ret: 0xa83731,
       k_ntpadj_lock: 0x1a6fe18,
-      k_dynlib_status: 0x120,
       k_allproc: 0x34a9d50,
       k_aio_table: 0xc38,
 
@@ -405,6 +404,7 @@ const impl_map = {
       k_sysctl___kern_smp_cpus: 0x2770780,
       k_route_output_rtmsg2_ret: 0xa83b81,
       k_ntpadj_lock: 0x1a6fed8,
+      k_dynlib_status: 0x120,
 
       lk_close: 0x37250,
       lk__error: 0x1e7f0,
@@ -810,6 +810,9 @@ const impl_map = {
         arw.view(m_impl).setBInt(impl.wk_ArrayBuffer_m_contents_m_maxByteLength, 0, true);
       },
     },
+    5: {
+      k_route_output_rtmsg2_ret: 0xac1681,
+    },
     0x20: {
       k_route_output_rtmsg2_ret: 0xac1471,
 
@@ -1099,11 +1102,7 @@ const impl_map = {
         return webkit_base.add(0x642b2);
       },
     },
-    0x40: {
-      k_sysctl___kern_smp_cpus: 0x2929e90,
-      k_route_output_rtmsg2_ret: 0xb53751,
-      k_ntpadj_lock: 0x1af9f38,
-
+    0x20: {
       wk_pthread_create: 0x2c78920,
       wk_pthread_join: 0x2c78960,
 
@@ -1164,6 +1163,11 @@ const impl_map = {
       get wk_PUSH_QWORD_PTR_RBX_JMP_QWORD_PTR_RAX() {
         return webkit_base.add(0x642b2);
       },
+    },
+    0x40: {
+      k_sysctl___kern_smp_cpus: 0x2929e90,
+      k_route_output_rtmsg2_ret: 0xb53751,
+      k_ntpadj_lock: 0x1af9f38,
     },
     0x60: {
       k_sysctl___kern_smp_cpus: 0x2929ed0,

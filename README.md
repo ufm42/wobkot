@@ -5,10 +5,10 @@ Updated userland to use newer JSC bugs.
 # How to use
 
 - place payloads based on console:
-  - for ps5: `elfldr.elf` and `kexp.bin` in `ps5` folder.
-  - for ps4: `payload.bin` in `ps4` folder.
+  - for ps5: `elfldr.elf` and `kexp.bin` in `src/ps5` folder.
+  - for ps4: `payload.bin` in `src/ps4` folder.
 - `py host.py`
-- open browser and type `https://{ip}`
+- open web browser and type `https://{PC_IP}`
 
 # References
 
