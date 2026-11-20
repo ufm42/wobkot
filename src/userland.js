@@ -76,7 +76,7 @@ const arw = {
 
         const getter = () => {};
 
-        for (let i = 0; i < 0x10000; i++) {
+        for (let i = 0; i < 0x20000; i++) {
           getter[i] = i;
         }
 
