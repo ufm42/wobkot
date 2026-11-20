@@ -1343,12 +1343,6 @@ const impl_map = {
       k_route_output_rtmsg2_ret: 0xad8aa0,
       k_ntpadj_lock: 0x1a8bab8,
       k_allproc: 0x3579e80,
-    },
-    0x60: {
-      k_sysctl___kern_smp_cpus: 0x28cef60,
-      k_route_output_rtmsg2_ret: 0xae2da0,
-      k_ntpadj_lock: 0x1a9bab8,
-      k_allproc: 0x3589e80,
 
       wk_pthread_create: 0x2ad7fa0,
       wk_pthread_join: 0x2ad7fe0,
@@ -1412,6 +1406,12 @@ const impl_map = {
       get wk_PUSH_QWORD_PTR_RBX_JMP_QWORD_PTR_RAX() {
         return webkit_base.add(0x66d82);
       },
+    },
+    0x60: {
+      k_sysctl___kern_smp_cpus: 0x28cef60,
+      k_route_output_rtmsg2_ret: 0xae2da0,
+      k_ntpadj_lock: 0x1a9bab8,
+      k_allproc: 0x3589e80,
     },
   },
 };
