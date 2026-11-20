@@ -420,10 +420,10 @@ const impl_map = {
         return webkit_base.add(0x165e5a);
       },
       get wk_POP_RDI_RET() {
-        return webkit_base.add(0x9a572d);
+        return webkit_base.add(0x360e3a7);
       },
       get wk_POP_RSI_RET() {
-        return webkit_base.add(0x369d4ca);
+        return webkit_base.add(0x31a735a);
       },
       get wk_POP_RBP_RET() {
         return webkit_base.add(0x1b6cf3);
@@ -513,15 +513,15 @@ const impl_map = {
       get wk_POP_RDX_RET() {
         return webkit_base.add(0x3521db7);
       },
-      get wk_POP_RDI_RET() {
-        return webkit_base.add(0x9a576d);
-      },
       get wk_POP_RBP_RET() {
         return webkit_base.add(0x1b5993);
       },
       get wk_POP_RSP_RET() {
         return webkit_base.add(0x36318b0);
       },
+    },
+    0x50: {
+      k_route_output_rtmsg2_ret: 0xa9eef0,
     },
   },
   7: {
