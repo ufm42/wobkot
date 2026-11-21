@@ -1,0 +1,8 @@
+services:
+  wobkot:
+    build: .
+    image: wobkot
+    init: true
+    ports:
+      - "443:443"
+    restart: unless-stopped
