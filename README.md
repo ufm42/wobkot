@@ -2,6 +2,11 @@
 
 Updated userland to use newer JSC bugs.
 
+| Console | Supported firmwares |
+|:---------:|:---------------------:|
+| PS4 | 9.00 - 12.02 |
+| PS5 | 3.00 - 13.60 |
+
 # How to use
 
 - place payloads based on console:
